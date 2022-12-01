@@ -4,8 +4,5 @@ pluginManagement {
         gradlePluginPortal()
         mavenLocal()
     }
-    plugins {
-        id "${quarkusPluginId}" version "${quarkusPluginVersion}"
-    }
 }
-rootProject.name='amazon-lambda-random-shutdown-failure'
+rootProject.name='amazon-lambda-simple-handler-with-generic-input'

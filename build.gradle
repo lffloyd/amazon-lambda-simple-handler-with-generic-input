@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'io.quarkus'
 }
 
 repositories {
@@ -9,11 +8,9 @@ repositories {
 }
 
 dependencies {
-    implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
-    implementation 'io.quarkus:quarkus-amazon-lambda'
-    implementation 'io.quarkus:quarkus-arc'
-    testImplementation 'io.quarkus:quarkus-junit5'
-    testImplementation 'io.rest-assured:rest-assured'
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.2'
+    implementation 'com.amazonaws:aws-lambda-java-events:2.2.9'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.2.2'
 }
 
 group 'org.test'
@@ -24,14 +21,17 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
-test {
-    systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
-}
 compileJava {
     options.encoding = 'UTF-8'
     options.compilerArgs << '-parameters'
 }
 
-compileTestJava {
-    options.encoding = 'UTF-8'
+task buildZip(type: Zip) {
+    from compileJava
+    from processResources
+    into('lib') {
+        from configurations.runtimeClasspath
+    }
 }
+
+build.dependsOn buildZip
